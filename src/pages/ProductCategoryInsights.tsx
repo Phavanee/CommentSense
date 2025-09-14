@@ -2,8 +2,6 @@ import { Button, Card, CardContent, MenuItem, Select, Stack, Typography } from '
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from 'recharts';
 import { useMemo, useState } from 'react';
 
-const COLORS = ['#34A853', '#FBBC05', '#EA4335'];
-
 const categories = ['Makeup', 'Skincare', 'Haircare', 'Hair Color'] as const;
 
 type Category = typeof categories[number];
