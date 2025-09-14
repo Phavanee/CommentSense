@@ -1,0 +1,91 @@
+import { Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
+
+const videos = [
+	{ id: '85806', title: 'Unlocking the Benefits of Face Masks for Skin Health' },
+	{ id: '30556', title: 'Get ready for the Magic — hydration #skincare' },
+	{ id: '45298', title: '#shortvedio #balayage' },
+];
+
+const videoSentiment: Record<string, 'positive' | 'neutral' | 'negative'> = {
+	'85806': 'positive',
+	'30556': 'neutral',
+	'45298': 'negative',
+};
+
+function sentimentEmoji(label: 'positive' | 'neutral' | 'negative') {
+	switch (label) {
+		case 'positive':
+			return '😊';
+		case 'neutral':
+			return '😐';
+		case 'negative':
+			return '😞';
+	}
+}
+
+export default function CampaignLevelInsights() {
+	const [query, setQuery] = useState('');
+	const [currentId, setCurrentId] = useState('85806');
+	const currentTitle = useMemo(() => videos.find(v => v.id === currentId)?.title ?? '', [currentId]);
+	const sentiment = videoSentiment[currentId] ?? 'neutral';
+
+	function onSearch() {
+		const found = videos.find(v => v.id === query.trim());
+		if (found) setCurrentId(found.id);
+	}
+
+	return (
+		<div className="grid-8x12" style={{ padding: '0 0 12px 0', gridTemplateRows: '2px 2px auto 1fr 1fr 1fr', columnGap: 16, rowGap: 16 }}>
+			{/* Box 1: row 3 columns 2-11, no outline */}
+			<div style={{ gridColumn: '2 / 12', gridRow: '3 / 4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+				<Typography variant="h6">Video {currentId}</Typography>
+				<Stack direction="row" spacing={1}>
+					<TextField size="small" placeholder="Search Video ID" value={query} onChange={(e) => setQuery(e.target.value)} />
+					<Button variant="contained" onClick={onSearch}>Search</Button>
+				</Stack>
+			</div>
+
+			{/* Box 2: columns 2-4 rows 4-5 sentiment box */}
+			<Card className="grid-box" style={{ gridColumn: '2 / 5', gridRow: '4 / 6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+				<CardContent sx={{ textAlign: 'center', width: '100%', p: 2 }}>
+					<Box sx={{ fontSize: 96, lineHeight: 1 }}>{sentimentEmoji(sentiment)}</Box>
+					<Typography sx={{ mt: 1, textTransform: 'capitalize', fontSize: 20, fontWeight: 600 }}>{sentiment}</Typography>
+				</CardContent>
+			</Card>
+
+			{/* Box 3: columns 5-11 rows 4-5 Top comments with two columns */}
+			<Card className="grid-box" style={{ gridColumn: '5 / 12', gridRow: '4 / 6' }}>
+				<CardContent sx={{ p: 2 }}>
+					<Typography className="box-title" sx={{ mb: 1 }}>Top comments based on...</Typography>
+					<Stack direction="row" spacing={2}>
+						<Box sx={{ flex: 1 }}>
+							<Typography variant="subtitle2" sx={{ mb: 1 }}>Likes</Typography>
+							<Box sx={{ border: '1px solid #eee', borderRadius: 1, p: 1 }}>
+								<Typography variant="body2">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
+								<Typography variant="body2">Vestibulum ante ipsum primis in faucibus orci luctus.</Typography>
+							</Box>
+						</Box>
+						<Box sx={{ flex: 1 }}>
+							<Typography variant="subtitle2" sx={{ mb: 1 }}>Relevance</Typography>
+							<Box sx={{ border: '1px solid #eee', borderRadius: 1, p: 1 }}>
+								<Typography variant="body2">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Typography>
+								<Typography variant="body2">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</Typography>
+							</Box>
+						</Box>
+					</Stack>
+				</CardContent>
+			</Card>
+
+			{/* Box 4: row 6-7 columns 2-11 summary text */}
+			<Card className="grid-box" style={{ gridColumn: '2 / 12', gridRow: '6 / 7' }}>
+				<CardContent sx={{ p: 2 }}>
+					<Typography className="box-title" sx={{ mb: 1 }}>Audience Sentiment Summary</Typography>
+					<Typography variant="body2">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
+					</Typography>
+				</CardContent>
+			</Card>
+		</div>
+	);
+} 
